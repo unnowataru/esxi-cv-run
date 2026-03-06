@@ -1,0 +1,48 @@
+repository:
+  name: esxi-cv-run
+  category: project_repo
+  inherits_from: work-env
+
+sources:
+  common_policy_repo: C:\dev\work-env
+
+agents:
+  codex:
+    role: implementation_orchestrator
+  claude:
+    role: design_reviewer_sidecar
+  xai:
+    role: research_sidecar
+
+shared_skills:
+  - name: x-search
+    source_repo: work-env
+    source_path: skills/x-search
+    use_cases:
+      - blog_source_collection
+      - slide_source_collection
+      - market_signal_scan
+
+project:
+  summary: ROI-based ESXi Host Client capture and Gemini classification demo.
+  stack:
+    - python
+    - opencv
+    - pillow
+    - mss
+    - gemini
+  primary_commands:
+    bootstrap:
+      - python -m venv .venv
+      - .\.venv\Scripts\Activate.ps1
+      - pip install -r requirements.txt
+    test:
+      - python -m compileall .
+    run:
+      - python .\pick_roi.py
+      - $env:GOOGLE_API_KEY="<YOUR_API_KEY>"; python .\realtime_summary.py
+
+governance:
+  common_policy_source: work-env
+  secrets_source: 1password_cli
+  deliverable_sot: onedrive_for_business
